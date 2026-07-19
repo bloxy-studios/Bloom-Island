@@ -121,8 +121,9 @@ final class IslandViewModel {
     // MARK: Formatting
 
     /// Formats a number of seconds as `m:ss` (e.g. 754 → "12:34").
+    /// The canonical implementation lives in the shared `ActivityFormat`
+    /// so the future widget target formats identically.
     static func formattedCountdown(_ seconds: TimeInterval) -> String {
-        let whole = max(0, Int(seconds.rounded(.down)))
-        return String(format: "%d:%02d", whole / 60, whole % 60)
+        ActivityFormat.countdown(seconds)
     }
 }
