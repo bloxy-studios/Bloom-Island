@@ -22,27 +22,42 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      - name: Pick an iPhone simulator
+      - name: Pick the newest iPhone simulator
         run: |
-          # xcrun xctrace lists devices on stderr (https://developer.apple.com/forums/thread/663959)
-          device=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//")
-          if [ -z "$device" ]; then
-            echo "No iPhone simulator found on this runner" >&2
+          cat > /tmp/pick_sim.py <<'PYEOF'
+          import json, re, sys
+          data = json.load(sys.stdin)["devices"]
+          best = None
+          for runtime, devs in data.items():
+              m = re.search(r"iOS-(\d+)-(\d+)", runtime)
+              if not m:
+                  continue
+              v = (int(m.group(1)), int(m.group(2)))
+              for d in devs:
+                  if d.get("isAvailable") and d["name"].startswith("iPhone"):
+                      if best is None or v > best[0]:
+                          best = (v, d)
+          if best:
+              print(best[1]["udid"], best[1]["name"], "%d.%d" % best[0])
+          PYEOF
+          PICK=$(xcrun simctl list devices available --json | python3 /tmp/pick_sim.py)
+          if [ -z "$PICK" ]; then
+            echo "No available iPhone simulator found on this runner" >&2
             exit 1
           fi
-          echo "Using simulator: $device"
-          echo "DEVICE=$device" >> "$GITHUB_ENV"
+          echo "Picked simulator: $PICK"
+          echo "DEVICE_ID=${PICK%% *}" >> "$GITHUB_ENV"
 
       - name: Build
         run: |
           xcodebuild build-for-testing \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
-            -destination "platform=iOS Simulator,name=$DEVICE"
+            -destination "platform=iOS Simulator,id=$DEVICE_ID"
 
       - name: Test
         run: |
           xcodebuild test-without-building \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
-            -destination "platform=iOS Simulator,name=$DEVICE"
+            -destination "platform=iOS Simulator,id=$DEVICE_ID"
