@@ -2,42 +2,121 @@
 //  BloomUITests.swift
 //  BloomUITests
 //
-//  Created by Abdul Karim Ali on 7/19/26.
+//  Island interaction flows: tap the island → the expanded layout appears;
+//  tap outside → it collapses. The app is launched with --island-uitests,
+//  which freezes ambient wallpaper animation so quiescence stays fast.
 //
 
+import CoreGraphics
 import XCTest
 
 final class BloomUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    private func launchApp() -> XCUIApplication {
         let app = XCUIApplication()
+        app.launchArguments = ["--island-uitests"]
         app.launch()
+        return app
+    }
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // XCUIAutomation Documentation
-        // https://developer.apple.com/documentation/xcuiautomation
+    /// Taps an element, falling back to a center-coordinate tap for
+    /// accessibility containers that report themselves as non-hittable.
+    @MainActor
+    private func tapElement(_ element: XCUIElement) {
+        if element.isHittable {
+            element.tap()
+        } else {
+            element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        }
     }
 
     @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
+    private func element(_ app: XCUIApplication, identifier: String) -> XCUIElement {
+        app.descendants(matching: .any).matching(identifier: identifier).firstMatch
+    }
+
+    // MARK: Tests
+
+    @MainActor
+    func testTappingIslandExpandsLiveActivity() throws {
+        let app = launchApp()
+
+        let island = element(app, identifier: "DynamicIsland")
+        XCTAssertTrue(island.waitForExistence(timeout: 10), "The island should be mounted at launch")
+
+        tapElement(island)
+
+        XCTAssertTrue(
+            app.staticTexts["Golden Hour"].waitForExistence(timeout: 5),
+            "Tapping the compact island should expand the music live activity"
+        )
+        XCTAssertTrue(
+            app.staticTexts["Sable Rivers"].exists,
+            "The expanded card should show the activity subtitle"
+        )
+    }
+
+    @MainActor
+    func testTappingOutsideCollapsesIsland() throws {
+        let app = launchApp()
+
+        let island = element(app, identifier: "DynamicIsland")
+        XCTAssertTrue(island.waitForExistence(timeout: 10))
+
+        tapElement(island)
+        let title = app.staticTexts["Golden Hour"]
+        XCTAssertTrue(title.waitForExistence(timeout: 5), "The island should be expanded before collapsing")
+
+        tapElement(element(app, identifier: "IslandCanvas"))
+
+        XCTAssertTrue(
+            title.waitForNonExistence(timeout: 5),
+            "Tapping outside the island should collapse it back to the pill"
+        )
+    }
+
+    @MainActor
+    func testControlStripReachesTimerActivity() throws {
+        let app = launchApp()
+
+        let timerChip = app.buttons["ControlTimer"]
+        XCTAssertTrue(timerChip.waitForExistence(timeout: 10), "The demo control strip should be visible")
+
+        timerChip.tap()
+
+        XCTAssertTrue(
+            app.staticTexts["Focus Timer"].waitForExistence(timeout: 5),
+            "The timer live activity should be reachable from the demo controls"
+        )
+    }
+
+    @MainActor
+    func testControlStripReachesActionBarAndOutsideTapDismissesIt() throws {
+        let app = launchApp()
+
+        let actionsChip = app.buttons["ControlActions"]
+        XCTAssertTrue(actionsChip.waitForExistence(timeout: 10))
+
+        actionsChip.tap()
+
+        let reply = app.buttons["Reply"]
+        XCTAssertTrue(
+            reply.waitForExistence(timeout: 5),
+            "The actions state should bloom into a glass action bar with a prominent Reply"
+        )
+        XCTAssertTrue(app.buttons["Love"].exists)
+        XCTAssertTrue(app.buttons["More"].exists)
+
+        tapElement(element(app, identifier: "IslandCanvas"))
+
+        XCTAssertTrue(
+            reply.waitForNonExistence(timeout: 5),
+            "Tapping outside the action bar should collapse the island"
+        )
     }
 }

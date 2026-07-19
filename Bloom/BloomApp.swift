@@ -2,31 +2,17 @@
 //  BloomApp.swift
 //  Bloom
 //
-//  Created by Abdul Karim Ali on 7/19/26.
+//  Bloom Island — an in-app recreation of the iPhone Dynamic Island,
+//  styled with iOS 26 Liquid Glass.
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct BloomApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
     }
 }
