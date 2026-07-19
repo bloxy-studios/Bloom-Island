@@ -40,14 +40,17 @@ final class BloomUITests: XCTestCase {
         app.descendants(matching: .any).matching(identifier: identifier).firstMatch
     }
 
-    /// Taps the island itself. Uses an in-element coordinate so the touch
-    /// lands on the pill regardless of how the accessibility container
-    /// reports hittability.
+    /// Taps the island. The pill itself sits inside the simulator's
+    /// status-bar strip where synthesized touches never reach the app, so
+    /// this taps the island's touch-grace zone just below the pill
+    /// (top-center, 70 pt down) — still the island's own hit target.
     @MainActor
     private func tapIsland(_ app: XCUIApplication) {
         let island = element(app, identifier: "DynamicIsland")
         XCTAssertTrue(island.waitForExistence(timeout: 10), "The island should be mounted at launch")
-        island.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55)).tap()
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
+            .withOffset(CGVector(dx: 0, dy: 70))
+            .tap()
     }
 
     // MARK: Tests

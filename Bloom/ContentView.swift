@@ -40,9 +40,6 @@ struct ContentView: View {
         // notification-center edge pan — defer that gesture so taps on the
         // pill reach the app, like the hardware island.
         .defersSystemGestures(on: .top)
-        // Under UI tests the status-bar window would intercept synthesized
-        // taps on the pill; hide it there (humans keep the status bar).
-        .statusBarHidden(DemoFlags.isUITesting)
     }
 }
 

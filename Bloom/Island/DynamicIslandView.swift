@@ -85,12 +85,16 @@ struct DynamicIslandView: View {
             .opacity(model.state.isExpanded ? 1 : 0.55)
             .allowsHitTesting(false)
         }
-        .contentShape(RoundedRectangle(cornerRadius: geo.cornerRadius))
         .scaleEffect(
             x: isPressed ? 1.03 : 1,
             y: isPressed ? 1.05 : 1,
             anchor: .top
         )
+        // Like the hardware island, the collapsed pill's touch target
+        // extends below it — the pill itself sits in the system's
+        // status-bar strip, where touches are unreliable.
+        .padding(.bottom, model.state.isExpanded ? 0 : GlassTokens.compactTouchGrace)
+        .contentShape(Rectangle())
         .onTapGesture {
             withAnimation(GlassTokens.stateChange(reduceMotion: reduceMotion)) {
                 model.tapIsland()
@@ -122,7 +126,10 @@ struct DynamicIslandView: View {
                 )
         } else {
             content()
-                .glassEffect(GlassTokens.surfaceGlass, in: .rect(cornerRadius: cornerRadius))
+                .glassEffect(
+                    GlassTokens.surfaceGlass(expanded: model.state.isExpanded),
+                    in: .rect(cornerRadius: cornerRadius)
+                )
                 .glassEffectID("island", in: glassNamespace)
                 .glassEffectTransition(.matchedGeometry)
         }

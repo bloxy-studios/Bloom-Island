@@ -39,15 +39,24 @@ enum GlassTokens {
 
     /// The island body is near-black glass: opaque enough to read as
     /// hardware, open enough for the wallpaper to bleed through the rim.
-    static let surfaceTint = Color.black.opacity(0.87)
+    /// Collapsed it sits over the sensor housing, so it runs nearly opaque;
+    /// expanded surfaces let a little more wallpaper through.
+    static func surfaceTint(expanded: Bool) -> Color {
+        Color.black.opacity(expanded ? 0.87 : 0.94)
+    }
 
     /// Solid replacement for the surface under Reduce Transparency.
     static let opaqueSurface = Color(red: 0.05, green: 0.045, blue: 0.06)
 
     /// Glass recipe for the island surface.
-    static var surfaceGlass: Glass {
-        .regular.tint(surfaceTint).interactive()
+    static func surfaceGlass(expanded: Bool) -> Glass {
+        .regular.tint(surfaceTint(expanded: expanded)).interactive()
     }
+
+    /// Invisible touch grace below the collapsed pill. The pill itself sits
+    /// in the strip the system reserves for the status bar, so — like the
+    /// hardware island — its touch target extends generously beneath it.
+    static let compactTouchGrace: CGFloat = 32
 
     /// Container spacing at which neighboring glass begins to melt together.
     static let morphSpacing: CGFloat = 24
