@@ -10,7 +10,6 @@
 		D6526E86300D23CD00F56CF7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6526E85300D23CC00F56CF7 /* WidgetKit.framework */; };
 		D6526E88300D23CD00F56CF7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6526E87300D23CD00F56CF7 /* SwiftUI.framework */; };
 		D6526E97300D23D100F56CF7 /* BloomIslandWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D6526E83300D23CC00F56CF7 /* BloomIslandWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		D6526EA1300D250700F56CF7 /* ActivityLift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9D300D250700F56CF7 /* ActivityLift.swift */; };
 		D6526EA2300D250700F56CF7 /* BloomActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9F300D250700F56CF7 /* BloomActivityAttributes.swift */; };
 		D6526EA3300D250700F56CF7 /* ActivityRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9E300D250700F56CF7 /* ActivityRegions.swift */; };
 		D6526EA4300D250700F56CF7 /* ActivityLift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9D300D250700F56CF7 /* ActivityLift.swift */; };
@@ -370,7 +369,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6526EA1300D250700F56CF7 /* ActivityLift.swift in Sources */,
 				D6526EA2300D250700F56CF7 /* BloomActivityAttributes.swift in Sources */,
 				D6526EA3300D250700F56CF7 /* ActivityRegions.swift in Sources */,
 			);
@@ -445,6 +443,7 @@
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -476,6 +475,7 @@
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;

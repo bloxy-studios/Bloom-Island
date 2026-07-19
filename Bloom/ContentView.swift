@@ -14,6 +14,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var model = IslandViewModel()
+    @State private var systemActivity = SystemLiveActivityController()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -27,7 +28,7 @@ struct ContentView: View {
                         }
                     }
 
-                ControlStrip(model: model)
+                ControlStrip(model: model, systemActivity: systemActivity)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                     .padding(.bottom, proxy.safeAreaInsets.bottom + 18)
 
@@ -240,6 +241,7 @@ private struct RibbonCurve: Shape {
 /// recolors the wallpaper to prove the glass lip responds to it.
 private struct ControlStrip: View {
     var model: IslandViewModel
+    var systemActivity: SystemLiveActivityController
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
@@ -263,9 +265,50 @@ private struct ControlStrip: View {
                 }
             }
 
+            systemActivityRow()
+
             sliderRow()
         }
         .padding(.horizontal, 20)
+    }
+
+    /// Starts/ends the real ActivityKit Live Activity for the current
+    /// selection, surfacing authorization or request problems inline.
+    @ViewBuilder
+    private func systemActivityRow() -> some View {
+        let button = Button {
+            systemActivity.toggle(for: model)
+        } label: {
+            Label(
+                systemActivity.isRunning ? "End Live Activity" : "System Live Activity",
+                systemImage: systemActivity.isRunning
+                    ? "stop.circle.fill"
+                    : "dot.radiowaves.left.and.right"
+            )
+            .font(.system(size: 12, weight: .semibold))
+            .lineLimit(1)
+            .padding(.horizontal, 2)
+            .padding(.vertical, 6)
+        }
+        .accessibilityIdentifier("ControlSystemActivity")
+
+        HStack(spacing: 10) {
+            if reduceTransparency {
+                button.buttonStyle(.bordered)
+            } else {
+                button.buttonStyle(.glass)
+            }
+
+            if let message = systemActivity.statusMessage {
+                Text(message)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(GlassTokens.deepMauve)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+            }
+
+            Spacer(minLength: 0)
+        }
     }
 
     @ViewBuilder

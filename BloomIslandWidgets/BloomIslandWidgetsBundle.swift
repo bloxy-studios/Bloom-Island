@@ -2,17 +2,15 @@
 //  BloomIslandWidgetsBundle.swift
 //  BloomIslandWidgets
 //
-//  Created by Abdul Karim Ali on 7/19/26.
+//  Bloom ships one widget: the island's Live Activity.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 @main
 struct BloomIslandWidgetsBundle: WidgetBundle {
     var body: some Widget {
-        BloomIslandWidgets()
-        BloomIslandWidgetsControl()
         BloomIslandWidgetsLiveActivity()
     }
 }

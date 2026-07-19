@@ -2,79 +2,145 @@
 //  BloomIslandWidgetsLiveActivity.swift
 //  BloomIslandWidgets
 //
-//  Created by Abdul Karim Ali on 7/19/26.
+//  The system Live Activity for Bloom's island: the Lock Screen banner and
+//  the real Dynamic Island presentations, rendered from the same shared
+//  regions the in-app island uses (Shared/ActivityRegions.swift) and the
+//  same BloomActivityAttributes the app requests with. The in-app island
+//  was the design playground; this is the production surface it was
+//  designed to lift into.
 //
 
 import ActivityKit
-import WidgetKit
 import SwiftUI
-
-struct BloomIslandWidgetsAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        // Dynamic stateful properties about your activity go here!
-        var emoji: String
-    }
-
-    // Fixed non-changing properties about your activity go here!
-    var name: String
-}
+import WidgetKit
 
 struct BloomIslandWidgetsLiveActivity: Widget {
+
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: BloomIslandWidgetsAttributes.self) { context in
-            // Lock screen/banner UI goes here
-            VStack {
-                Text("Hello \(context.state.emoji)")
-            }
-            .activityBackgroundTint(Color.cyan)
-            .activitySystemActionForegroundColor(Color.black)
+        ActivityConfiguration(for: BloomActivityAttributes.self) { context in
+            // Lock Screen / banner: the full shared card on island black.
+            ActivityCardView(
+                attributes: context.attributes,
+                content: context.state,
+                renderingContext: .widget
+            )
+            .activityBackgroundTint(.black)
+            .activitySystemActionForegroundColor(.white)
 
         } dynamicIsland: { context in
-            DynamicIsland {
-                // Expanded UI goes here.  Compose the expanded UI through
-                // various regions, like leading/trailing/center/bottom
+            let card = ActivityCardView(
+                attributes: context.attributes,
+                content: context.state,
+                renderingContext: .widget
+            )
+            let accent = context.attributes.kind.accent
+
+            return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    card.leadingRegion
+                }
+                DynamicIslandExpandedRegion(.center) {
+                    card.centerRegion
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    card.trailingRegion
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom \(context.state.emoji)")
-                    // more content
+                    card.bottomRegion
                 }
             } compactLeading: {
-                Text("L")
+                Image(systemName: context.attributes.leadingSymbol)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(accent)
             } compactTrailing: {
-                Text("T \(context.state.emoji)")
+                CompactTrailingSlot(
+                    attributes: context.attributes,
+                    content: context.state
+                )
             } minimal: {
-                Text(context.state.emoji)
+                Image(systemName: context.attributes.leadingSymbol)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(accent)
             }
-            .widgetURL(URL(string: "http://www.apple.com"))
-            .keylineTint(Color.red)
+            .keylineTint(accent)
         }
     }
 }
 
-extension BloomIslandWidgetsAttributes {
-    fileprivate static var preview: BloomIslandWidgetsAttributes {
-        BloomIslandWidgetsAttributes(name: "World")
+/// The compact trailing slot: a static waveform for music, the
+/// system-driven countdown for timers.
+private struct CompactTrailingSlot: View {
+    let attributes: BloomActivityAttributes
+    let content: BloomActivityAttributes.ContentState
+
+    var body: some View {
+        switch attributes.kind {
+        case .music:
+            WaveformGlyph(tint: attributes.kind.accent, animated: false)
+        case .timer:
+            if let range = content.timerRange {
+                Text(timerInterval: range, countsDown: true)
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .monospacedDigit()
+                    .multilineTextAlignment(.trailing)
+                    .frame(maxWidth: 44)
+                    .foregroundStyle(attributes.kind.accent)
+            }
+        }
     }
 }
 
-extension BloomIslandWidgetsAttributes.ContentState {
-    fileprivate static var smiley: BloomIslandWidgetsAttributes.ContentState {
-        BloomIslandWidgetsAttributes.ContentState(emoji: "😀")
-     }
-     
-     fileprivate static var starEyes: BloomIslandWidgetsAttributes.ContentState {
-         BloomIslandWidgetsAttributes.ContentState(emoji: "🤩")
-     }
+// MARK: - Previews
+
+extension BloomActivityAttributes {
+
+    fileprivate static var previewMusic: BloomActivityAttributes {
+        BloomActivityAttributes(
+            kind: .music,
+            title: "Golden Hour",
+            subtitle: "Sable Rivers",
+            leadingSymbol: "music.note",
+            trailingSymbol: "waveform"
+        )
+    }
+
+    fileprivate static var previewTimer: BloomActivityAttributes {
+        BloomActivityAttributes(
+            kind: .timer,
+            title: "Focus Timer",
+            subtitle: "Deep work",
+            leadingSymbol: "timer",
+            trailingSymbol: "pause.fill"
+        )
+    }
 }
 
-#Preview("Notification", as: .content, using: BloomIslandWidgetsAttributes.preview) {
-   BloomIslandWidgetsLiveActivity()
+#Preview("Lock Screen — Music", as: .content, using: BloomActivityAttributes.previewMusic) {
+    BloomIslandWidgetsLiveActivity()
 } contentStates: {
-    BloomIslandWidgetsAttributes.ContentState.smiley
-    BloomIslandWidgetsAttributes.ContentState.starEyes
+    BloomActivityAttributes.ContentState.music(start: .now, duration: 222)
+}
+
+#Preview("Island expanded — Music", as: .dynamicIsland(.expanded), using: BloomActivityAttributes.previewMusic) {
+    BloomIslandWidgetsLiveActivity()
+} contentStates: {
+    BloomActivityAttributes.ContentState.music(start: .now, duration: 222)
+}
+
+#Preview("Island expanded — Timer", as: .dynamicIsland(.expanded), using: BloomActivityAttributes.previewTimer) {
+    BloomIslandWidgetsLiveActivity()
+} contentStates: {
+    BloomActivityAttributes.ContentState.timer(start: .now, duration: 15 * 60)
+}
+
+#Preview("Island compact — Timer", as: .dynamicIsland(.compact), using: BloomActivityAttributes.previewTimer) {
+    BloomIslandWidgetsLiveActivity()
+} contentStates: {
+    BloomActivityAttributes.ContentState.timer(start: .now, duration: 15 * 60)
+}
+
+#Preview("Island minimal — Music", as: .dynamicIsland(.minimal), using: BloomActivityAttributes.previewMusic) {
+    BloomIslandWidgetsLiveActivity()
+} contentStates: {
+    BloomActivityAttributes.ContentState.music(start: .now, duration: 222)
 }

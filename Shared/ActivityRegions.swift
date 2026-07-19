@@ -101,7 +101,8 @@ struct ActivityCardView: View {
 
     // MARK: Leading region
 
-    private var leadingRegion: some View {
+    /// Exposed for `DynamicIslandExpandedRegion(.leading)` in the widget.
+    var leadingRegion: some View {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
             .fill(
                 LinearGradient(
@@ -124,7 +125,8 @@ struct ActivityCardView: View {
 
     // MARK: Center region
 
-    private var centerRegion: some View {
+    /// Exposed for `DynamicIslandExpandedRegion(.center)` in the widget.
+    var centerRegion: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(attributes.title)
                 .font(.system(size: 16, weight: .semibold))
@@ -138,8 +140,9 @@ struct ActivityCardView: View {
 
     // MARK: Trailing region
 
+    /// Exposed for `DynamicIslandExpandedRegion(.trailing)` in the widget.
     @ViewBuilder
-    private var trailingRegion: some View {
+    var trailingRegion: some View {
         switch attributes.kind {
         case .music:
             WaveformGlyph(
@@ -171,8 +174,9 @@ struct ActivityCardView: View {
 
     // MARK: Bottom region
 
+    /// Exposed for `DynamicIslandExpandedRegion(.bottom)` in the widget.
     @ViewBuilder
-    private var bottomRegion: some View {
+    var bottomRegion: some View {
         switch attributes.kind {
         case .music:
             if case .music(let songStart, let duration) = content.payload {
