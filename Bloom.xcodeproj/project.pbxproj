@@ -6,7 +6,26 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D6526E86300D23CD00F56CF7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6526E85300D23CC00F56CF7 /* WidgetKit.framework */; };
+		D6526E88300D23CD00F56CF7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6526E87300D23CD00F56CF7 /* SwiftUI.framework */; };
+		D6526E97300D23D100F56CF7 /* BloomIslandWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D6526E83300D23CC00F56CF7 /* BloomIslandWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D6526EA1300D250700F56CF7 /* ActivityLift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9D300D250700F56CF7 /* ActivityLift.swift */; };
+		D6526EA2300D250700F56CF7 /* BloomActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9F300D250700F56CF7 /* BloomActivityAttributes.swift */; };
+		D6526EA3300D250700F56CF7 /* ActivityRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9E300D250700F56CF7 /* ActivityRegions.swift */; };
+		D6526EA4300D250700F56CF7 /* ActivityLift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9D300D250700F56CF7 /* ActivityLift.swift */; };
+		D6526EA5300D250700F56CF7 /* BloomActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9F300D250700F56CF7 /* BloomActivityAttributes.swift */; };
+		D6526EA6300D250700F56CF7 /* ActivityRegions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6526E9E300D250700F56CF7 /* ActivityRegions.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		D6526E95300D23D100F56CF7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D652B128300CCBFB004A1345 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6526E82300D23CC00F56CF7;
+			remoteInfo = BloomIslandWidgetsExtension;
+		};
 		D652B140300CCC01004A1345 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D652B128300CCBFB004A1345 /* Project object */;
@@ -23,15 +42,63 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D6526E98300D23D100F56CF7 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D6526E97300D23D100F56CF7 /* BloomIslandWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		D6526E83300D23CC00F56CF7 /* BloomIslandWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BloomIslandWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6526E85300D23CC00F56CF7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		D6526E87300D23CD00F56CF7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		D6526E9D300D250700F56CF7 /* ActivityLift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLift.swift; sourceTree = "<group>"; };
+		D6526E9E300D250700F56CF7 /* ActivityRegions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRegions.swift; sourceTree = "<group>"; };
+		D6526E9F300D250700F56CF7 /* BloomActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomActivityAttributes.swift; sourceTree = "<group>"; };
 		D652B130300CCBFB004A1345 /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D652B13F300CCC01004A1345 /* BloomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D652B149300CCC01004A1345 /* BloomUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BloomUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D6526E9B300D23D100F56CF7 /* Exceptions for "BloomIslandWidgets" folder in "BloomIslandWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D6526E82300D23CC00F56CF7 /* BloomIslandWidgetsExtension */;
+		};
+		D6526EA8300D2B3F00F56CF7 /* Exceptions for "Bloom" folder in "Bloom" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D652B12F300CCBFB004A1345 /* Bloom */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		D6526E89300D23CD00F56CF7 /* BloomIslandWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D6526E9B300D23D100F56CF7 /* Exceptions for "BloomIslandWidgets" folder in "BloomIslandWidgetsExtension" target */,
+			);
+			path = BloomIslandWidgets;
+			sourceTree = "<group>";
+		};
 		D652B132300CCBFB004A1345 /* Bloom */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D6526EA8300D2B3F00F56CF7 /* Exceptions for "Bloom" folder in "Bloom" target */,
+			);
 			path = Bloom;
 			sourceTree = "<group>";
 		};
@@ -48,6 +115,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D6526E80300D23CC00F56CF7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6526E88300D23CD00F56CF7 /* SwiftUI.framework in Frameworks */,
+				D6526E86300D23CD00F56CF7 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D652B12D300CCBFB004A1345 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,12 +148,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D6526E84300D23CC00F56CF7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D6526E85300D23CC00F56CF7 /* WidgetKit.framework */,
+				D6526E87300D23CD00F56CF7 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D6526EA0300D250700F56CF7 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				D6526E9D300D250700F56CF7 /* ActivityLift.swift */,
+				D6526E9E300D250700F56CF7 /* ActivityRegions.swift */,
+				D6526E9F300D250700F56CF7 /* BloomActivityAttributes.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		D652B127300CCBFB004A1345 = {
 			isa = PBXGroup;
 			children = (
+				D6526EA0300D250700F56CF7 /* Shared */,
 				D652B132300CCBFB004A1345 /* Bloom */,
 				D652B142300CCC01004A1345 /* BloomTests */,
 				D652B14C300CCC01004A1345 /* BloomUITests */,
+				D6526E89300D23CD00F56CF7 /* BloomIslandWidgets */,
+				D6526E84300D23CC00F56CF7 /* Frameworks */,
 				D652B131300CCBFB004A1345 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +186,7 @@
 				D652B130300CCBFB004A1345 /* Bloom.app */,
 				D652B13F300CCC01004A1345 /* BloomTests.xctest */,
 				D652B149300CCC01004A1345 /* BloomUITests.xctest */,
+				D6526E83300D23CC00F56CF7 /* BloomIslandWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +194,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D6526E82300D23CC00F56CF7 /* BloomIslandWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6526E9C300D23D100F56CF7 /* Build configuration list for PBXNativeTarget "BloomIslandWidgetsExtension" */;
+			buildPhases = (
+				D6526E7F300D23CC00F56CF7 /* Sources */,
+				D6526E80300D23CC00F56CF7 /* Frameworks */,
+				D6526E81300D23CC00F56CF7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D6526E89300D23CD00F56CF7 /* BloomIslandWidgets */,
+			);
+			name = BloomIslandWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = BloomIslandWidgetsExtension;
+			productReference = D6526E83300D23CC00F56CF7 /* BloomIslandWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		D652B12F300CCBFB004A1345 /* Bloom */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D652B153300CCC01004A1345 /* Build configuration list for PBXNativeTarget "Bloom" */;
@@ -102,10 +223,12 @@
 				D652B12C300CCBFB004A1345 /* Sources */,
 				D652B12D300CCBFB004A1345 /* Frameworks */,
 				D652B12E300CCBFB004A1345 /* Resources */,
+				D6526E98300D23D100F56CF7 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D6526E96300D23D100F56CF7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D652B132300CCBFB004A1345 /* Bloom */,
@@ -173,6 +296,9 @@
 				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					D6526E82300D23CC00F56CF7 = {
+						CreatedOnToolsVersion = 26.6;
+					};
 					D652B12F300CCBFB004A1345 = {
 						CreatedOnToolsVersion = 26.6;
 					};
@@ -203,11 +329,19 @@
 				D652B12F300CCBFB004A1345 /* Bloom */,
 				D652B13E300CCC01004A1345 /* BloomTests */,
 				D652B148300CCC01004A1345 /* BloomUITests */,
+				D6526E82300D23CC00F56CF7 /* BloomIslandWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D6526E81300D23CC00F56CF7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D652B12E300CCBFB004A1345 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,10 +366,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D6526E7F300D23CC00F56CF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6526EA1300D250700F56CF7 /* ActivityLift.swift in Sources */,
+				D6526EA2300D250700F56CF7 /* BloomActivityAttributes.swift in Sources */,
+				D6526EA3300D250700F56CF7 /* ActivityRegions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D652B12C300CCBFB004A1345 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6526EA4300D250700F56CF7 /* ActivityLift.swift in Sources */,
+				D6526EA5300D250700F56CF7 /* BloomActivityAttributes.swift in Sources */,
+				D6526EA6300D250700F56CF7 /* ActivityRegions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +403,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D6526E96300D23D100F56CF7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D6526E82300D23CC00F56CF7 /* BloomIslandWidgetsExtension */;
+			targetProxy = D6526E95300D23D100F56CF7 /* PBXContainerItemProxy */;
+		};
 		D652B141300CCC01004A1345 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D652B12F300CCBFB004A1345 /* Bloom */;
@@ -269,6 +421,68 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		D6526E99300D23D100F56CF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K63K8RN4S8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BloomIslandWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BloomIslandWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bloxy-studios.Bloom.BloomIslandWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D6526E9A300D23D100F56CF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K63K8RN4S8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BloomIslandWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BloomIslandWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bloxy-studios.Bloom.BloomIslandWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D652B151300CCC01004A1345 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -400,6 +614,8 @@
 				DEVELOPMENT_TEAM = K63K8RN4S8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Bloom/Info.plist;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -433,6 +649,8 @@
 				DEVELOPMENT_TEAM = K63K8RN4S8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Bloom/Info.plist;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -543,6 +761,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D6526E9C300D23D100F56CF7 /* Build configuration list for PBXNativeTarget "BloomIslandWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6526E99300D23D100F56CF7 /* Debug */,
+				D6526E9A300D23D100F56CF7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D652B12B300CCBFB004A1345 /* Build configuration list for PBXProject "Bloom" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
