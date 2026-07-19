@@ -52,7 +52,8 @@ struct ActivityLiftTests {
         let model = IslandViewModel(now: epoch)
         let state = model.liftedContentState(for: .timer)
 
-        for offset in [0.0, 1, 60, 7.5 * 60, 15 * 60, 16 * 60, -99] {
+        let offsets: [TimeInterval] = [0, 1, 60, 7.5 * 60, 15 * 60, 16 * 60, -99]
+        for offset in offsets {
             let date = epoch.addingTimeInterval(offset)
             #expect(closeEnough(state.timerRemaining(at: date), model.timerRemaining(at: date)))
             #expect(closeEnough(state.timerFraction(at: date), model.timerFraction(at: date)))
@@ -64,7 +65,8 @@ struct ActivityLiftTests {
         model.restartTimer(duration: 5 * 60, from: epoch.addingTimeInterval(30))
         let state = model.liftedContentState(for: .timer)
 
-        for offset in [30.0, 90, 30 + 5 * 60, 1000] {
+        let offsets: [TimeInterval] = [30, 90, 30 + 5 * 60, 1000]
+        for offset in offsets {
             let date = epoch.addingTimeInterval(offset)
             #expect(closeEnough(state.timerRemaining(at: date), model.timerRemaining(at: date)))
             #expect(closeEnough(state.timerFraction(at: date), model.timerFraction(at: date)))
@@ -77,7 +79,8 @@ struct ActivityLiftTests {
         let model = IslandViewModel(now: epoch)
         let state = model.liftedContentState(for: .music)
 
-        for offset in [0.0, 42, model.musicDuration / 2, model.musicDuration + 10, 5000, -7] {
+        let offsets: [TimeInterval] = [0, 42, model.musicDuration / 2, model.musicDuration + 10, 5000, -7]
+        for offset in offsets {
             let date = epoch.addingTimeInterval(offset)
             #expect(closeEnough(state.musicElapsed(at: date), model.musicElapsed(at: date)))
             #expect(closeEnough(state.musicProgress(at: date), model.musicProgress(at: date)))
