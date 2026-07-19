@@ -72,17 +72,11 @@ enum GlassTokens {
 
     // MARK: Accents
 
-    /// Warm accent for the music activity.
-    static let musicAccent = Color(red: 0.94, green: 0.72, blue: 0.44)
-
-    /// Cool mauve accent for the timer activity.
-    static let timerAccent = Color(red: 0.80, green: 0.62, blue: 0.86)
-
+    /// Per-activity accent. Canonical values live in the shared
+    /// `BloomActivityAttributes.Kind.accent` so the future widget target
+    /// renders identical colors without importing app-side styling.
     static func accent(for activity: LiveActivity) -> Color {
-        switch activity.kind {
-        case .music: musicAccent
-        case .timer: timerAccent
-        }
+        BloomActivityAttributes.Kind(lifting: activity.kind).accent
     }
 
     // MARK: Lens lip

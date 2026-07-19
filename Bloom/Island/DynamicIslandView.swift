@@ -245,7 +245,10 @@ private struct CompactContent: View {
     private var trailing: some View {
         switch activity.kind {
         case .music:
-            WaveformGlyph(tint: GlassTokens.accent(for: activity))
+            WaveformGlyph(
+                tint: GlassTokens.accent(for: activity),
+                animated: !DemoFlags.isUITesting
+            )
         case .timer:
             TimelineView(.periodic(from: .now, by: DemoFlags.isUITesting ? 3600 : 1)) { context in
                 Text(IslandViewModel.formattedCountdown(model.timerRemaining(at: context.date)))
@@ -260,173 +263,27 @@ private struct CompactContent: View {
 
 // MARK: - Live activity card
 
-/// Expanded layout mirroring ActivityKit's regions — leading, center,
-/// trailing, bottom — so it can be lifted into a real widget unchanged.
+/// Thin island-side host for the shared `ActivityCardView`: it supplies the
+/// ticking clock, then renders the exact attributes + content state the
+/// future widget target will receive — so the in-app island and the system
+/// island can never drift apart.
 private struct LiveActivityCard: View {
     let activity: LiveActivity
     let model: IslandViewModel
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: DemoFlags.isUITesting ? 3600 : 1)) { context in
-            VStack(spacing: 14) {
-                HStack(spacing: 12) {
-                    leadingRegion
-                    centerRegion
-                    Spacer(minLength: 8)
-                    trailingRegion(at: context.date)
-                }
-                bottomRegion(at: context.date)
-            }
-            .padding(.horizontal, 22)
-            .padding(.vertical, 18)
+            ActivityCardView(
+                attributes: BloomActivityAttributes(lifting: activity),
+                content: model.liftedContentState(for: activity),
+                renderingContext: .island,
+                now: context.date,
+                waveformAnimated: !DemoFlags.isUITesting
+            )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("IslandLiveCard")
-    }
-
-    // MARK: Regions
-
-    private var leadingRegion: some View {
-        RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        GlassTokens.accent(for: activity).opacity(0.92),
-                        GlassTokens.deepMauve.opacity(0.72),
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .frame(width: 44, height: 44)
-            .overlay {
-                Image(systemName: activity.leadingSymbol)
-                    .font(.system(size: 19, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            .accessibilityHidden(true)
-    }
-
-    private var centerRegion: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(activity.title)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
-            Text(activity.subtitle)
-                .font(.system(size: 13, weight: .regular))
-                .foregroundStyle(.white.opacity(0.6))
-        }
-        .lineLimit(1)
-    }
-
-    @ViewBuilder
-    private func trailingRegion(at date: Date) -> some View {
-        switch activity.kind {
-        case .music:
-            WaveformGlyph(tint: GlassTokens.accent(for: activity))
-        case .timer:
-            let remaining = IslandViewModel.formattedCountdown(model.timerRemaining(at: date))
-            Text(remaining)
-                .font(.system(size: 30, weight: .semibold, design: .rounded))
-                .monospacedDigit()
-                .contentTransition(.numericText(countsDown: true))
-                .foregroundStyle(GlassTokens.accent(for: activity))
-                .animation(GlassTokens.contentSpring, value: remaining)
-        }
-    }
-
-    @ViewBuilder
-    private func bottomRegion(at date: Date) -> some View {
-        switch activity.kind {
-        case .music:
-            VStack(spacing: 8) {
-                progressBar(
-                    fraction: model.musicProgress(at: date),
-                    tint: GlassTokens.accent(for: activity)
-                )
-
-                HStack {
-                    Text(IslandViewModel.formattedCountdown(model.musicElapsed(at: date)))
-                    Spacer()
-                    Text("-" + IslandViewModel.formattedCountdown(
-                        model.musicDuration - model.musicElapsed(at: date)
-                    ))
-                }
-                .font(.system(size: 11, weight: .medium, design: .rounded))
-                .monospacedDigit()
-                .foregroundStyle(.white.opacity(0.55))
-
-                HStack(spacing: 34) {
-                    Image(systemName: "backward.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 22, weight: .semibold))
-                    Image(systemName: "forward.fill")
-                        .font(.system(size: 16, weight: .semibold))
-                }
-                .foregroundStyle(.white)
-                .padding(.top, 2)
-            }
-
-        case .timer:
-            VStack(spacing: 8) {
-                progressBar(
-                    fraction: model.timerFraction(at: date),
-                    tint: GlassTokens.accent(for: activity)
-                )
-
-                HStack {
-                    Text(activity.subtitle.uppercased())
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.45))
-                    Spacer()
-                    Image(systemName: activity.trailingSymbol)
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.8))
-                }
-            }
-        }
-    }
-
-    private func progressBar(fraction: Double, tint: Color) -> some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color.white.opacity(0.18))
-                Capsule()
-                    .fill(tint)
-                    .frame(width: max(5, proxy.size.width * CGFloat(fraction)))
-            }
-        }
-        .frame(height: 5)
-    }
-}
-
-// MARK: - Waveform glyph
-
-/// A tiny animated equalizer, deterministic and freezable for UI tests.
-private struct WaveformGlyph: View {
-    let tint: Color
-
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 24.0, paused: DemoFlags.isUITesting)) { context in
-            let phase = context.date.timeIntervalSinceReferenceDate
-            HStack(spacing: 2.5) {
-                ForEach(0..<4, id: \.self) { index in
-                    Capsule()
-                        .fill(tint)
-                        .frame(width: 3, height: barHeight(index: index, phase: phase))
-                }
-            }
-        }
-        .frame(height: 16)
-        .accessibilityHidden(true)
-    }
-
-    private func barHeight(index: Int, phase: TimeInterval) -> CGFloat {
-        let wave = sin(phase * 5.2 + Double(index) * 1.7)
-        return 6 + CGFloat((wave + 1) / 2) * 10
     }
 }
 
