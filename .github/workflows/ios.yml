@@ -10,6 +10,7 @@ jobs:
   build-and-test:
     name: Build and test Bloom on iPhone simulator
     runs-on: macos-26
+    timeout-minutes: 30
 
     env:
       SCHEME: Bloom
@@ -55,9 +56,25 @@ jobs:
             -scheme "$SCHEME" \
             -destination "platform=iOS Simulator,id=$DEVICE_ID"
 
+      - name: Boot simulator and wait until ready
+        run: xcrun simctl bootstatus "$DEVICE_ID" -b
+
       - name: Test
         run: |
           xcodebuild test-without-building \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
-            -destination "platform=iOS Simulator,id=$DEVICE_ID"
+            -destination "platform=iOS Simulator,id=$DEVICE_ID" \
+            -parallel-testing-enabled NO \
+            -maximum-concurrent-test-simulator-destinations 1 \
+            -test-timeouts-enabled YES \
+            -default-test-execution-time-allowance 300 \
+            -maximum-test-execution-time-allowance 600 \
+            -resultBundlePath TestResults.xcresult
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult
