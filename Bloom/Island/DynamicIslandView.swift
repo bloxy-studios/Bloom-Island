@@ -91,7 +91,19 @@ struct DynamicIslandView: View {
             y: isPressed ? 1.05 : 1,
             anchor: .top
         )
-        .gesture(pressGesture)
+        .onTapGesture {
+            withAnimation(GlassTokens.stateChange(reduceMotion: reduceMotion)) {
+                model.tapIsland()
+            }
+        }
+        .onLongPressGesture(
+            minimumDuration: 0.35,
+            maximumDistance: 24,
+            perform: {},
+            onPressingChanged: { pressing in
+                withAnimation(GlassTokens.pressSpring) { isPressed = pressing }
+            }
+        )
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel(model.state.isExpanded ? "Dynamic Island, expanded" : "Dynamic Island")
     }
@@ -114,25 +126,6 @@ struct DynamicIslandView: View {
                 .glassEffectID("island", in: glassNamespace)
                 .glassEffectTransition(.matchedGeometry)
         }
-    }
-
-    /// Press: the island stretches slightly toward the touch (anchored at
-    /// the top). Release inside: treat as a tap.
-    private var pressGesture: some Gesture {
-        DragGesture(minimumDistance: 0)
-            .onChanged { _ in
-                guard !isPressed else { return }
-                withAnimation(GlassTokens.pressSpring) { isPressed = true }
-            }
-            .onEnded { value in
-                withAnimation(GlassTokens.pressSpring) { isPressed = false }
-                let travel = max(abs(value.translation.width), abs(value.translation.height))
-                if travel < 16 {
-                    withAnimation(GlassTokens.stateChange(reduceMotion: reduceMotion)) {
-                        model.tapIsland()
-                    }
-                }
-            }
     }
 
     // MARK: Action bar

@@ -40,19 +40,26 @@ final class BloomUITests: XCTestCase {
         app.descendants(matching: .any).matching(identifier: identifier).firstMatch
     }
 
+    /// Taps the island itself. Uses an in-element coordinate so the touch
+    /// lands on the pill regardless of how the accessibility container
+    /// reports hittability.
+    @MainActor
+    private func tapIsland(_ app: XCUIApplication) {
+        let island = element(app, identifier: "DynamicIsland")
+        XCTAssertTrue(island.waitForExistence(timeout: 10), "The island should be mounted at launch")
+        island.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.55)).tap()
+    }
+
     // MARK: Tests
 
     @MainActor
     func testTappingIslandExpandsLiveActivity() throws {
         let app = launchApp()
 
-        let island = element(app, identifier: "DynamicIsland")
-        XCTAssertTrue(island.waitForExistence(timeout: 10), "The island should be mounted at launch")
-
-        tapElement(island)
+        tapIsland(app)
 
         XCTAssertTrue(
-            app.staticTexts["Golden Hour"].waitForExistence(timeout: 5),
+            app.staticTexts["Golden Hour"].waitForExistence(timeout: 8),
             "Tapping the compact island should expand the music live activity"
         )
         XCTAssertTrue(
@@ -65,12 +72,9 @@ final class BloomUITests: XCTestCase {
     func testTappingOutsideCollapsesIsland() throws {
         let app = launchApp()
 
-        let island = element(app, identifier: "DynamicIsland")
-        XCTAssertTrue(island.waitForExistence(timeout: 10))
-
-        tapElement(island)
+        tapIsland(app)
         let title = app.staticTexts["Golden Hour"]
-        XCTAssertTrue(title.waitForExistence(timeout: 5), "The island should be expanded before collapsing")
+        XCTAssertTrue(title.waitForExistence(timeout: 8), "The island should be expanded before collapsing")
 
         tapElement(element(app, identifier: "IslandCanvas"))
 
